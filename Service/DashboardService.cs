@@ -9,20 +9,8 @@ namespace FraudDetection.Service
         public async Task<DashBoardDto> GetDashBoardData(string? userId)
         {
            using var connection = await CreateOpenConnection();
-            await connection.OpenAsync();
 
-            using var command = connection.CreateCommand();
-
-            if (!string.IsNullOrWhiteSpace(userId))
-            {
-                command.CommandText = @"SELECT COUNT(*) AS total_transactions, COALESCE(SUM(high_risk), 0) AS high_risk, COALESCE(SUM(suspicious), 0) AS suspicious, COUNT(CASE WHEN rule_triggered IS NOT NULL AND rule_triggered <> '' THEN 1 END) AS flagged_transactions FROM transactions WHERE user_id = $userId;";
-                command.Parameters.AddWithValue("$userId", userId);
-            }
-            else
-            {
-                command.CommandText = @"SELECT COUNT(*) AS total_transactions, COALESCE(SUM(high_risk), 0) AS high_risk, COALESCE(SUM(suspicious), 0) AS suspicious, COUNT(CASE WHEN rule_triggered IS NOT NULL AND rule_triggered <> '' THEN 1 END) AS flagged_transactions FROM transactions;";
-            }
-            using var data = await command.ExecuteReaderAsync();
+            using var data = await ExecuteDashboardQuery(connection, userId);
             if (await data.ReadAsync())
             {
                 return new DashBoardDto
@@ -35,7 +23,23 @@ namespace FraudDetection.Service
             }
             return new DashBoardDto();
         }
+        private async Task<SqliteDataReader> ExecuteDashboardQuery(SqliteConnection connection,string? userId)
+        {
+            var command = connection.CreateCommand();
 
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                command.CommandText = @"SELECT COUNT(*) AS total_transactions, COALESCE(SUM(high_risk), 0) AS high_risk,COALESCE(SUM(suspicious), 0) AS suspicious, COALESCE(SUM(high_risk) + SUM(suspicious), 0) AS flagged_transactions FROM transactions WHERE user_id = $userId;";
+
+                command.Parameters.AddWithValue("$userId", userId);
+            }
+            else
+            {
+                command.CommandText = @"SELECT COUNT(*) AS total_transactions, COALESCE(SUM(high_risk), 0) AS high_risk,COALESCE(SUM(suspicious), 0) AS suspicious, COALESCE(SUM(high_risk) + SUM(suspicious), 0) AS flagged_transactions FROM transactions;";
+            }
+
+            return await command.ExecuteReaderAsync();
+        }
         private static async Task<SqliteConnection> CreateOpenConnection()
         {
             var dbPath = Path.Combine(Directory.GetCurrentDirectory(), "user.db");
