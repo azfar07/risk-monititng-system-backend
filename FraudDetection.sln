@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37012.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FraudDetection", "FraudDetection.csproj", "{0FB501A0-6FBE-4328-B75B-BE9EA4CC3A93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FB501A0-6FBE-4328-B75B-BE9EA4CC3A93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB501A0-6FBE-4328-B75B-BE9EA4CC3A93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FB501A0-6FBE-4328-B75B-BE9EA4CC3A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB501A0-6FBE-4328-B75B-BE9EA4CC3A93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB183806-4C61-4839-92B4-398DF17F82DE}
+	EndGlobalSection
+EndGlobal
